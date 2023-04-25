@@ -53,6 +53,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $rendezVouses;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastname;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_verified;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date_naissane;
+
 
 
     public function __construct()
@@ -234,6 +254,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $rendezVouse->setDocteur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function isIsVerified(): ?bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setIsVerified(bool $is_verified): self
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
+    }
+
+    public function getDateNaissane(): ?\DateTimeInterface
+    {
+        return $this->date_naissane;
+    }
+
+    public function setDateNaissane(\DateTimeInterface $date_naissane): self
+    {
+        $this->date_naissane = $date_naissane;
 
         return $this;
     }
