@@ -10,6 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 
 class UserController extends AbstractController
 {
@@ -34,11 +37,11 @@ class UserController extends AbstractController
         $user->setEmail($email);
         $user->setFirstname($firstname);
         $user->setLastname($lastname);
-        $user->setRoles(array($roles));
+        $user->setRoles($roles);
         $encoded = $encoder->encodePassword($user, $plaintextPassword);
         $user->setPassword($encoded);
         $user->setIsVerified(true);
-        $user->setDateNaissane(new \Datetime($date_naissance));
+        $user->setDateNaissane(new \Datetime(strtotime($date_naissance)));
 
         try{
             $em->persist($user);
@@ -52,12 +55,12 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/signIn", name="app_login")
+     * @Route("user/signIn", name="app_login")
      */
 
      public function SignIn(Request $request,EntityManagerInterface $em){
 
-        $email=$request->query->get('eamil');
+        $email=$request->query->get('email');
         $password=$request->query->get('password');
 
         $user=$em->getRepository(User::class)->findOneBy(['email'=>$email]);
@@ -66,11 +69,10 @@ class UserController extends AbstractController
 
             if(password_verify($password,$user->getPassword())){
 
-                $data=[];
+                $serializer=new Serializer([new ObjectNormalizer()]);
+                $formatted=$serializer->normalize($user);
 
-                $data['user']=$user;
-
-                return new JsonResponse($data, 200);
+                return new JsonResponse($formatted);
             }else{
                 return new Response('password invalid');
             }
