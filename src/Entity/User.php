@@ -27,7 +27,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $email;
 
-
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $roles;
 
     /**
      * @var string The hashed password
@@ -69,11 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="date")
      */
     private $date_naissane;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $compte;
 
 
 
@@ -117,6 +115,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUsername(): string
     {
         return (string) $this->email;
+    }
+
+    public function getRoles(): ?string
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(string $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**
@@ -289,20 +299,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRoles()
-    {
-        // TODO: Implement getRoles() method.
-    }
-
-    public function getCompte(): ?string
-    {
-        return $this->compte;
-    }
-
-    public function setCompte(string $compte): self
-    {
-        $this->compte = $compte;
-
-        return $this;
-    }
 }
