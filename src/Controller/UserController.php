@@ -18,6 +18,7 @@ class UserController extends AbstractController
 {
     /**
      * @Route("user/signup", name="app_register")
+     * @throws \Exception
      */
     public function Signup(Request $request,EntityManagerInterface $em,UserPasswordEncoderInterface $encoder): JsonResponse
     {
@@ -26,7 +27,7 @@ class UserController extends AbstractController
         $lastname=$request->query->get('lastname');
         $plaintextPassword=$request->query->get('password');
         $date_naissance=$request->query->get('date_naissance');
-        $roles=$request->query->get('roles');
+        $role=$request->query->get('role');
 
         //control mail
         if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
@@ -37,7 +38,7 @@ class UserController extends AbstractController
         $user->setEmail($email);
         $user->setFirstname($firstname);
         $user->setLastname($lastname);
-        $user->setRoles($roles);
+        $user->setCompte($role);
         $encoded = $encoder->encodePassword($user, $plaintextPassword);
         $user->setPassword($encoded);
         $user->setIsVerified(true);
