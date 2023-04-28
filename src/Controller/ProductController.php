@@ -93,7 +93,7 @@ class ProductController extends AbstractController
         $em->remove($product);
         $em->flush();
 
-        return new JsonResponse("Product is deleted successfully");
+        return new JsonResponse("Product is deleted successfully",200);
     }
 
     /**
