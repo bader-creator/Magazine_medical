@@ -68,11 +68,14 @@ class UserController extends AbstractController
         if($user){
 
             if(password_verify($password,$user->getPassword())){
+                $normalizer = new ObjectNormalizer(null, null, null, null, null, null, ['circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }]);
+                $serializer = new Serializer([$normalizer]);
+                $jsonData = $serializer->normalize($user);
 
-                $serializer=new Serializer([new ObjectNormalizer()]);
-                $formatted=$serializer->normalize($user);
-
-                return new JsonResponse($formatted);
+                $response = new JsonResponse($jsonData, 200, ['Content-Type' => 'application/json']);
+                return $response;
             }else{
                 return new Response('password invalid');
             }
